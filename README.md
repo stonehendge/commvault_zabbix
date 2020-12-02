@@ -10,7 +10,7 @@ Password can be encrypted with Encrypt App
 <login>
 <user>zbx_cmvlt</user>
 <pwd>hash_pwd</pwd>
-<domain>soglasie</domain>
+<domain>domain</domain>
 <url>http://<serverCMVLT>:81/SearchSvc/CVWebService.svc/</url>
 <client_group>9</client_group>
 <filter_subclient_app>"SQL Server"</filter_subclient_app>
