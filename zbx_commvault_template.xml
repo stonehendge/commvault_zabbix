@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2020-12-02T16:34:41Z</date>
+    <groups>
+        <group>
+            <name>Templates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Commvault Jobs</template>
+            <name>Commvault Jobs</name>
+            <description>Get state of completed jobs for last day</description>
+            <groups>
+                <group>
+                    <name>Templates</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>Commvault</name>
+                </application>
+            </applications>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>Commvault jobs discovery</name>
+                    <key>commvault.jobs</key>
+                    <lifetime>7d</lifetime>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Last day backup job status for {#HOSTNAME_CMVLT}</name>
+                            <type>DEPENDENT</type>
+                            <key>backup.status[{#HOSTNAME_CMVLT}]</key>
+                            <delay>0</delay>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Commvault</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$..status</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>commvault.jobs[{#CLIENTID_CMVLT},{#SUBCLIENT_CMVLT}]</key>
+                            </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last(1h)}&lt;&gt;&quot;[\&quot;Completed\&quot;]&quot;</expression>
+                                    <name>Last day backup failure {#HOSTNAME_CMVLT} : {#SUBCLIENT_CMVLT}</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Last day backup job elapsed time for {#HOSTNAME_CMVLT}</name>
+                            <type>DEPENDENT</type>
+                            <key>backup.time[{#HOSTNAME_CMVLT}]</key>
+                            <delay>0</delay>
+                            <trends>90d</trends>
+                            <applications>
+                                <application>
+                                    <name>Commvault</name>
+                                </application>
+                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <params>$..jobElapsedTime</params>
+                                </step>
+                                <step>
+                                    <type>REGEX</type>
+                                    <params>(\d+)
+\1</params>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>commvault.jobs[{#CLIENTID_CMVLT},{#SUBCLIENT_CMVLT}]</key>
+                            </master_item>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Commvault backup job check for {#HOSTNAME_CMVLT} : {#SUBCLIENT_CMVLT}</name>
+                            <key>commvault.jobs[{#CLIENTID_CMVLT},{#SUBCLIENT_CMVLT}]</key>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Commvault</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                    </item_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+        </template>
+    </templates>
+</zabbix_export>
