@@ -7,6 +7,8 @@ Zabbix template creates item for backup job status, executed in last 1 day.
 
 example of contents of config.xml file. Must be placed in directory with main executable.
 Password can be encrypted with Encrypt App
+
+```xml
 <login>
 <user>zbx_cmvlt</user>
 <pwd>hash_pwd</pwd>
@@ -15,3 +17,4 @@ Password can be encrypted with Encrypt App
 <client_group>9</client_group>
 <filter_subclient_app>"SQL Server"</filter_subclient_app>
 </login>
+```
